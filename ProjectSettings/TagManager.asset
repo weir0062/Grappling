@@ -9,12 +9,12 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PullTo
   - Water
   - UI
   - Bullet
   - Character
-  - 
+  - Ground
   - 
   - 
   - 
