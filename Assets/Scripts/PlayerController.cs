@@ -14,21 +14,20 @@ public class PlayerController : MonoBehaviour
     public float MaxSpeed = 0.69f;
     public float Acceleration = 6.9f;
     public float Deceleration = 0.69f;
-    public float MouseXSensitivity = 1.0f;
-    public float MouseYSensitivity = 1.0f;
     public float JumpSpeed = 6.9f;
-    float XRotation;
-    float YRotation;
     bool bGrounded;
-    public Transform orient;
     public Rigidbody body;
-    public Camera bodycam;
     bool IsAccelerating = false;
     Vector3 endposition;
     public Gun gun;
     public GameObject feetBottom;
-    public LayerMask groundLayer;
-
+    public LayerMask groundLayer;/*
+    public Transform orient;
+    public Camera bodycam;
+    float XRotation;
+    float YRotation;
+    public float MouseXSensitivity = 1.0f;
+    public float MouseYSensitivity = 1.0f;*/
     PlayerState state;
     // Start is called before the first frame update
     void Start()
@@ -49,7 +48,6 @@ public class PlayerController : MonoBehaviour
         {
             case PlayerState.Default:
                 HandleMovement();
-                HandleRotation();
                 HandleJump();
                 break;
             case PlayerState.Pulling:
@@ -96,32 +94,31 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
-
-        IsAccelerating = Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D);
-
-        Vector3 velocity = body.velocity;
-        if (Input.GetKey(KeyCode.W))
+            Vector3 velocity = body.velocity;
+            IsAccelerating = Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D);
+        if (CheckOnGround()) 
         {
-            velocity += transform.forward * Acceleration * Time.deltaTime;
+            if (Input.GetKey(KeyCode.W))
+            {
+                velocity += transform.forward * Acceleration * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                velocity -= transform.forward * Acceleration * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                velocity -= transform.right * Acceleration * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                velocity += transform.right * Acceleration * Time.deltaTime;
+            }         
         }
-        if (Input.GetKey(KeyCode.S))
-        {
-            velocity -= transform.forward * Acceleration * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            velocity -= transform.right * Acceleration * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            velocity += transform.right * Acceleration * Time.deltaTime;
-        }
-
         if (velocity.sqrMagnitude > MaxSpeed * MaxSpeed)
         {
             velocity = velocity.normalized * MaxSpeed;
         }
-
         if (!IsAccelerating && velocity != Vector3.zero)
         {
             Vector3 poop = velocity.normalized * Time.deltaTime * Deceleration;
@@ -153,7 +150,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void HandleRotation()
+/*    void HandleRotation()
     {
 
         float MouseX = Input.GetAxisRaw("Mouse X") * MouseXSensitivity;
@@ -169,7 +166,7 @@ public class PlayerController : MonoBehaviour
         orient.rotation = Quaternion.Euler(0, YRotation, 0);
         bodycam.transform.rotation = Quaternion.Euler(XRotation, bodycam.transform.rotation.eulerAngles.y, bodycam.transform.rotation.eulerAngles.z);
     }
-
+*/
 
 
 
